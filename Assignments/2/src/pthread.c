@@ -129,7 +129,7 @@ int main(int argc, char const *argv[])
 			break;
 	}
 	// printf("%d\n",j );
-	fp = fopen ("outputStats/staticSchedule.txt", "w");
+	fp = fopen ("output/staticSchedule.txt", "w");
 	for (int i = 0; i < j; ++i)
 		pthread_create(&threadArr[i], NULL,checkPrime,(void *)argArr[i] );
 	for (int i = 0; i < j; ++i)
@@ -164,7 +164,7 @@ int main(int argc, char const *argv[])
 	for (int i = 0; i < t; ++i)
 		free(argArrDy[i]);
 	fclose(fp);
-	 fp = fopen ("outputStats/dynamicSchedule.txt", "w");
+	 fp = fopen ("output/dynamicSchedule.txt", "w");
 	for (int i = 2; i <= n; ++i)
 	{ 
 		if (val[i]==1)
@@ -173,7 +173,7 @@ int main(int argc, char const *argv[])
 	}
 	free(val);
 	fclose(fp);
-	fp = fopen ("outputStats/time.txt", "w");
+	fp = fopen ("output/time.txt", "w");
     fprintf(fp," Thread_No Static_Time Dynamic_Time\n" );
 	for (int i = 0; i < t; ++i)
     {
@@ -192,7 +192,7 @@ int main(int argc, char const *argv[])
     fprintf(gnuplotPipe, " set xlabel 'Thread Number'\n");
     fprintf(gnuplotPipe, " set ylabel 'Execution Time (in secs)'\n");
     // fprintf(gnuplotPipe, " plot '-' smooth freq with boxes\n");//,  '' using 2 title 'Static Version',  '' using 3 title 'Dynamic Version'\n" );
-    fprintf(gnuplotPipe, " plot 'outputStats/time.txt' using 2:xtic(1) title 'Static'  ,'outputStats/time.txt' using 3 title 'Dynamic'\n");//,  '' using 2 title 'Static Version',  '' using 3 title 'Dynamic Version'\n" );
+    fprintf(gnuplotPipe, " plot 'output/time.txt' using 2:xtic(1) title 'Static'  ,'output/time.txt' using 3 title 'Dynamic'\n");//,  '' using 2 title 'Static Version',  '' using 3 title 'Dynamic Version'\n" );
     // fprintf(gnuplotPipe, " plot 'time.txt'  using 1:2 with boxes ls 1, 'time.txt' using 1:2 with boxes ls 2\n" );
     // fprintf(gnuplotPipe, " Thread_No Static_Version Dynamic_Version\n" );
     
