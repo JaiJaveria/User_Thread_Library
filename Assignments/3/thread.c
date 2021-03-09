@@ -27,7 +27,7 @@ typedef struct scheduler_val
 }scheduler_val;
 typedef struct mythread_t
 {
-	tcb* t;
+	tcb* tb;
 } mythread_t;
 
 typedef tcb * TCB_PTR;
@@ -73,10 +73,11 @@ int myThread_create(mythread_t *th,void *attr, void *start_routine, void *args)
 	}
 	int index=getQueueLoc();
 
-	tcb *t=(tcb *)malloc(sizeof(tcb));
+	tcb *t=malloc(sizeof(tcb));
 	t->read=0;
 	t->id=id++;
-
+	t->status=CREATED;
+	printf("%u\n",t->status );
 	t->stack_size=STACK_SIZE;
 	t->stack_orig=malloc(STACK_SIZE);
 	if (growsLower(&index))
@@ -86,15 +87,19 @@ int myThread_create(mythread_t *th,void *attr, void *start_routine, void *args)
 
 	t->func=start_routine;
 	t->arg=args;
+	// th=malloc(sizeof(mythread_t));
+	// th->tb=malloc(sizeof(tcb*));
+	th->tb=t;
+	printf("%u\n", ((th->tb))->status);
 	queue[index]=t;
-	th=malloc(sizeof(mythread_t));
-	th->t=t;
+
 	return t->id;
 }
 void thread_exit(TCB_PTR t)
 {
 	t->status=EXITED;
 	printf("exited\n");
+	printf("%u\n",t->status);
 	longjmp(sv->env,1);
 }
 void thread_start_wrapper(TCB_PTR t)
@@ -129,16 +134,15 @@ void myThread_schedule()
 	}
 
 }
-void myThread_join(mythread_t *mtt)
+void myThread_join(mythread_t mtt)
 {
-	while(mtt->t->status!=EXITED)
+	while(((mtt.tb))->status!=EXITED)
 	{
-		printf("%s\n",mtt->t->status );
-		// wait();
+		// printf("%u\n",((mtt.tb))->status );
+		// exit(-1);
 	}
-	free(mtt->t->stack_orig);
-	free(mtt->t);
-	free(mtt);
+	free(((mtt.tb))->stack_orig);
+	free((mtt.tb));
 }
 int main(int argc, char const *argv[])
 {
@@ -146,7 +150,10 @@ int main(int argc, char const *argv[])
 	void *a;
 	mythread_t t;
 	int i=myThread_create(&t,NULL,(&f),a);
+	// printf("%u\n", ((t.tb))->id);
+	printf("%u\n", ((t.tb))->status);
 	myThread_schedule();
-	myThread_join(&t);
+	myThread_schedule();
+	myThread_join(t);
 	return 0;
 }
