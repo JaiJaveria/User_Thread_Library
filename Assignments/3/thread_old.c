@@ -41,7 +41,7 @@ typedef struct cirQueue
 	int head;
 	int tail;
 } cirQueue;
-#define STACK_SIZE 8192
+#define STACK_SIZE 16*1024
 #define JB_SP 6
 #define JB_PC 7
 // TCB_PTR *queue;
@@ -232,25 +232,29 @@ void thread_exit(TCB_PTR t)
 	// printf("exited\n");
 	// printf("145--%u\n",t->status);
     ualarm(50000,50000);
-	longjmp(t->SVenv,1);
+	// longjmp(t->SVenv,1);
+	myThread_schedule();
 }
 void thread_start_wrapper(TCB_PTR t)
 {
 	// insideSchduler=0;//assumption only called at the end of my thread scheduler
-	// register void *top = t->stack_ptr;
- //    asm volatile(
- //        "mov %[rs], %%rsp \n"
- //        : [ rs ] "+r" (top) ::
- //    );
-    if(setjmp(t->currentenv) == 0)
-        {
-            t->currentenv[0].__jmpbuf[JB_SP] = manglex64((unsigned long)(t->stack_orig + (STACK_SIZE-8) / 8 - 2));
-            t->currentenv[0].__jmpbuf[JB_PC] = manglex64((unsigned long) wrapper);
-            // wrapper();
-            printf("wrapper called\n");
-			ualarm(50000,50000);
-            longjmp(t->currentenv,1);
-        }
+	register void *top = t->stack_ptr;
+    asm volatile(
+        "mov %[rs], %%rsp \n"
+        : [ rs ] "+r" (top) ::
+    );
+    printf("wrapper called\n");
+	ualarm(50000,50000);
+    wrapper();
+   //  if(setjmp(t->currentenv) == 0)
+   //      {
+   //          t->currentenv[0].__jmpbuf[JB_SP] = manglex64((unsigned long)(t->stack_orig + (STACK_SIZE-8) / 8 - 2));
+   //          t->currentenv[0].__jmpbuf[JB_PC] = manglex64((unsigned long) wrapper);
+   //          // wrapper();
+   //          printf("wrapper called\n");
+			// ualarm(50000,50000);
+   //          longjmp(t->currentenv,1);
+   //      }
     // printf("236--Inside thread start wrapper. t id %d\n", t->id);
   //   if (t->status==CREATED)
   //   {
