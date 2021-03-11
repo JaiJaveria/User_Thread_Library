@@ -33,6 +33,11 @@ typedef struct mythread_t
 {
 	tcb* tb;
 } mythread_t;
+typedef struct mythread_mutex_t
+{
+	int id;//id of thread who acquired it.
+	//-1 if none present.
+} mythread_mutex_t;
 typedef tcb * TCB_PTR;
 typedef struct cirQueue
 {
@@ -62,7 +67,68 @@ void myThread_schedule();
 void alarmHandlr (int a);
 void thread_start_wrapper(TCB_PTR t);
 void myThread_yield(void);
+void mythread_mutex_lock(mythread_mutex_t *m);
+void mythread_mutex_unlock(mythread_mutex_t *m);
+int myThread_create(mythread_t *th,void *attr, void *start_routine, void *args);
+void myThread_join(mythread_t mtt);
 
+typedef struct matmulArg
+{
+	int a_x;
+	int a_y;
+	int b_y;
+	int* c;
+	int *a;
+	int *b;
+	int j;
+	// int*** c;
+	// int **a;
+	// int **b;
+	// int *i;
+	// int *j;
+	// int a_y;
+	// int
+} matmulArg;
+
+void matmulElem(void *a)
+{
+	matmulArg *arg=a;
+	int ans=0;
+	int j=arg->j;
+	for (int k = 0; k < arg->a_y; ++k)
+	{
+		ans+=(arg->a)[k]*((arg->b)[k*(arg->a_y)+j]);
+	}
+	*(arg->c)=ans;
+	free(arg);
+}
+
+void matmul(int a_x, int a_y, int b_y, int **c,int *a, int *b)
+{
+
+	mythread_t arr[a_x][b_y];//=malloc(a_x*b_y*sizeof(mythread_t*));
+	for (int i = 0; i < a_x; ++i)
+	{
+		for (int j = 0; j < b_y; ++j)
+		{
+			matmulArg *arg=malloc(sizeof(matmulArg));
+			arg->a=&(a[i*a_y]);
+			arg->b=(b);
+			arg->c=&((*c)[i*b_y+j]);//c[i][j]
+			arg->j=j;
+			arg->a_y=a_y;
+			myThread_create(&arr[i][j],NULL,&matmulElem, arg);
+			// matmulElem(arg);
+		}
+	}
+	for (int i = 0; i < a_x; ++i)
+	{
+		for (int j = 0; j < b_y; ++j)
+		{
+			myThread_join(arr[i][j]);
+		}
+	}
+}
 void myFunc(void *a)
 {
 	// static int i=0;
@@ -91,12 +157,20 @@ void myFuncMain()
 	}
 	printf("f finished.\n");
 }
-
+void myFuncSync(mythread_mutex_t *p)
+{
+	static int a;
+	mythread_mutex_lock(p);
+	printf("103--%d started\n",a );
+	sleep(5);
+	printf("105--%d ended\n",a++ );
+	mythread_mutex_unlock(p);
+}
 void cirQueueInit(cirQueue **q)
 {
 	cirQueue *queue;
 	queue=malloc(sizeof(cirQueue));
-	queue->queueSize=5;
+	queue->queueSize=100;
 	queue->queueLen=0;
 	queue->q_orig=malloc(sizeof(TCB_PTR)*(queue->queueSize));
 	queue->head=-1;
@@ -191,7 +265,31 @@ void libInit()
 	thread_lib_init=1;//initialization done
 }
 
-
+int mythread_mutex_init(mythread_mutex_t* m, void* a)
+{
+	m->id=-1;
+	return 0;
+}
+void mythread_mutex_lock(mythread_mutex_t *m)
+{
+	while(1)
+	{
+		if (m->id!=-1)
+		{
+			printf("Wiating for lock to be freed. Thread t %d\n", currentThread->id);
+			myThread_yield();
+		}
+		else
+		{
+			m->id=currentThread->id;
+			break;
+		}
+	}
+}
+void mythread_mutex_unlock(mythread_mutex_t *m)
+{
+	m->id=-1;
+}
 void alarmHandlr (int a)
 {
 	ualarm(0,0);
@@ -295,7 +393,7 @@ void myThread_yield(void)
 }
 void thread_start_wrapper(TCB_PTR t)
 {
-    printf("236--Inside thread start wrapper. t id %d\n", t->id);
+    // printf("236--Inside thread start wrapper. t id %d\n", t->id);
     t->status=RUNNING;
     if(setjmp(t->currentenv) == 0)
         {
@@ -304,7 +402,7 @@ void thread_start_wrapper(TCB_PTR t)
             t->currentenv[0].__jmpbuf[JB_SP] = manglex64((unsigned long)(t->stack_orig + (STACK_SIZE-8) / 8 - 2));
             t->currentenv[0].__jmpbuf[JB_PC] = manglex64((unsigned long) wrapper);
             // wrapper();
-            printf("437--wrapper called\n");
+            // printf("437--wrapper called\n");
 			ualarm(50000,50000);
             longjmp(t->currentenv,1);
         }
@@ -331,6 +429,7 @@ void myThread_schedule()
 			if (currentThread==NULL)
 			{
 				printf("393--Current Thread null. assertion error\n"); 
+				exit(-1);
 			}
 			else
 			{
@@ -349,7 +448,7 @@ void myThread_schedule()
 				if (currentThread->status==READY)
 				{
 					t->status==RUNNING;
-
+					ualarm(50000,50000);
 					longjmp(currentThread->currentenv,1);
 					/* code */
 				}
@@ -374,31 +473,80 @@ void myThread_schedule()
 void myThread_join(mythread_t mtt)
 {
 	printf("428--Inside Join\n");
-	while(((mtt.tb))->status!=EXITED)
+	while(1)
 	{
+		if (((mtt.tb))->status==EXITED)
+		{
+			break;
+		}
+		else
+		{
+			myThread_yield();
+		}
 	}
 	free(((mtt.tb))->stack_orig);
 	free((mtt.tb));
 }
 int main(int argc, char const *argv[])
 {
-	void *a;
-	int count=atoi(argv[1]);
-	mythread_t t[count];
-	// mythread_t t2;
-	for (int i = 0; i < count; ++i)
+	// void *a;
+	// int count=atoi(argv[1]);
+	// mythread_t t[count];
+	// // mythread_t t2;
+	// mythread_mutex_t p;
+	// mythread_mutex_init(&p, NULL);
+
+	// for (int i = 0; i < count; ++i)
+	// {
+	// 	// myThread_create(&(t[i]),NULL,(&myFunc),a);
+	// 	myThread_create(&(t[i]),NULL,(&myFuncSync),&p);
+	// }
+	// // printf("443--Thread creation done. in main again.\n");
+	// // i=myThread_create(&t2,NULL,(&f),a);
+	// // printf("196--%u\n", ((t.tb))->status);
+	// // myThread_join(t);
+	// // myFuncMain();
+	// for (int i = 0; i < count; ++i)
+	// {
+	// 	myThread_join(t[i]);
+	// 	/* code */
+	// }
+	// int a[2][2];
+	// int b[2][2];
+	// int c[2][2];
+	int *a,*b,*c;
+	int a_x=5,a_y=5,b_y=2;
+	a=malloc(sizeof(int)*a_x*a_y);
+	b=malloc(sizeof(int)*b_y*a_y);
+	c=malloc(sizeof(int)*a_x*b_y);
+	for (int i = 0; i < a_x; ++i)
 	{
-		myThread_create(&(t[i]),NULL,(&myFunc),a);
+		for (int j = 0; j < a_y; ++j)
+		{
+			// a[i][j]=1;
+			a[i*a_y+j]=1;
+			// b[i][j]=1;
+		}
 	}
-	// printf("443--Thread creation done. in main again.\n");
-	// i=myThread_create(&t2,NULL,(&f),a);
-	// printf("196--%u\n", ((t.tb))->status);
-	// myThread_join(t);
-	myFuncMain();
-	for (int i = 0; i < count; ++i)
+	for (int i = 0; i < a_y; ++i)
 	{
-		myThread_join(t[i]);
-		/* code */
+		for (int j = 0; j < b_y; ++j)
+		{
+			// a[i][j]=1;
+			b[i*b_y+j]=1;
+			// b[i][j]=1;
+		}
+	}
+	printf("matmul callinig\n");
+	matmul(a_x,a_y,b_y,&c,a,b);
+	for (int i = 0; i < a_x; ++i)
+	{
+		printf(" c i %d ",i );
+		for (int j = 0; j < b_y; ++j)
+		{
+			printf("%d ",c[i*b_y+j] );
+		}
+		printf("\n");
 	}
 	return 0;
 }
