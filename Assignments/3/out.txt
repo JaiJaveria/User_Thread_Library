@@ -1,0 +1,643 @@
+==66523== Memcheck, a memory error detector
+==66523== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==66523== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==66523== Command: ./a.out 2
+==66523== 
+==66523== Syscall param rt_sigaction(act->sa_mask) points to uninitialised byte(s)
+==66523==    at 0x48A22E6: __libc_sigaction (sigaction.c:58)
+==66523==    by 0x1095E0: libInit (thread.c:164)
+==66523==    by 0x1096C7: myThread_create (thread.c:190)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523==  Address 0x1ffefffc38 is on thread 1's stack
+==66523==  in frame #0, created by __libc_sigaction (sigaction.c:43)
+==66523== 
+==66523== Warning: client switching stacks?  SP change: 0x1ffeffee10 --> 0x4a54610
+==66523==          to suppress, use: --max-stackframe=137344231424 or greater
+==66523== Invalid read of size 8
+==66523==    at 0x109845: thread_start_wrapper (thread.c:236)
+==66523==  Address 0x4a53578 is 3,944 bytes inside a block of size 8,192 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109718: myThread_create (thread.c:202)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid read of size 4
+==66523==    at 0x109849: thread_start_wrapper (thread.c:236)
+==66523==  Address 0x4a54658 is 8 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid read of size 8
+==66523==    at 0x10985F: thread_start_wrapper (thread.c:237)
+==66523==  Address 0x4a53578 is 3,944 bytes inside a block of size 8,192 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109718: myThread_create (thread.c:202)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D34: __sigsetjmp (setjmp.S:32)
+==66523==    by 0x10986E: thread_start_wrapper (thread.c:237)
+==66523==  Address 0x4a54660 is 16 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D47: __sigsetjmp (setjmp.S:43)
+==66523==    by 0x10986E: thread_start_wrapper (thread.c:237)
+==66523==  Address 0x4a54668 is 24 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D4B: __sigsetjmp (setjmp.S:47)
+==66523==    by 0x10986E: thread_start_wrapper (thread.c:237)
+==66523==  Address 0x4a54670 is 32 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D4F: __sigsetjmp (setjmp.S:48)
+==66523==    by 0x10986E: thread_start_wrapper (thread.c:237)
+==66523==  Address 0x4a54678 is 40 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D53: __sigsetjmp (setjmp.S:49)
+==66523==    by 0x10986E: thread_start_wrapper (thread.c:237)
+==66523==  Address 0x4a54680 is 48 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D57: __sigsetjmp (setjmp.S:50)
+==66523==    by 0x10986E: thread_start_wrapper (thread.c:237)
+==66523==  Address 0x4a54688 is 56 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D6D: __sigsetjmp (setjmp.S:55)
+==66523==    by 0x10986E: thread_start_wrapper (thread.c:237)
+==66523==  Address 0x4a54690 is 64 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D83: __sigsetjmp (setjmp.S:61)
+==66523==    by 0x10986E: thread_start_wrapper (thread.c:237)
+==66523==  Address 0x4a54698 is 72 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 4
+==66523==    at 0x48A1DBC: __sigjmp_save (sigjmp.c:29)
+==66523==    by 0x10986E: thread_start_wrapper (thread.c:237)
+==66523==  Address 0x4a546a0 is 80 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid read of size 8
+==66523==    at 0x109881: thread_start_wrapper (thread.c:240)
+==66523==  Address 0x4a53578 is 3,944 bytes inside a block of size 8,192 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109718: myThread_create (thread.c:202)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 4
+==66523==    at 0x109885: thread_start_wrapper (thread.c:240)
+==66523==  Address 0x4a54650 is 0 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid read of size 8
+==66523==    at 0x10988B: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a53578 is 3,944 bytes inside a block of size 8,192 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109718: myThread_create (thread.c:202)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid read of size 8
+==66523==    at 0x10988F: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a548d0 is 640 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid read of size 8
+==66523==    at 0x109896: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a53578 is 3,944 bytes inside a block of size 8,192 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109718: myThread_create (thread.c:202)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid read of size 8
+==66523==    at 0x10989A: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a548d8 is 648 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D34: __sigsetjmp (setjmp.S:32)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a54728 is 216 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D47: __sigsetjmp (setjmp.S:43)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a54730 is 224 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D4B: __sigsetjmp (setjmp.S:47)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a54738 is 232 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D4F: __sigsetjmp (setjmp.S:48)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a54740 is 240 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D53: __sigsetjmp (setjmp.S:49)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a54748 is 248 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D57: __sigsetjmp (setjmp.S:50)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a54750 is 256 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D6D: __sigsetjmp (setjmp.S:55)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a54758 is 264 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D83: __sigsetjmp (setjmp.S:61)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a54760 is 272 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 4
+==66523==    at 0x48A1DBC: __sigjmp_save (sigjmp.c:29)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a54768 is 280 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 4
+==66523==    at 0x109538: alarmHandlr (thread.c:139)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a54650 is 0 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid read of size 4
+==66523==    at 0x109A05: myThread_schedule (thread.c:301)
+==66523==    by 0x109547: alarmHandlr (thread.c:140)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a54650 is 0 bytes inside a block of size 656 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x10956B: alarmHandlr (thread.c:155)
+==66523== 
+==66523== Syscall param clock_nanosleep(rqtp) points to uninitialised byte(s)
+==66523==    at 0x493C334: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523==  Address 0x4a545a0 is 8,080 bytes inside a block of size 8,192 alloc'd
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109718: myThread_create (thread.c:202)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Conditional jump or move depends on uninitialised value(s)
+==66523==    at 0x493C35F: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:119)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x493C36F: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:119)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x494204F: nanosleep (nanosleep.c:34)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x4941F82: sleep (sleep.c:62)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523== 
+==66523== Conditional jump or move depends on uninitialised value(s)
+==66523==    at 0x4941F95: sleep (sleep.c:65)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x4941F9D: sleep (sleep.c:65)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x109620: f (thread.c:172)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523== 
+==66523== Conditional jump or move depends on uninitialised value(s)
+==66523==    at 0x10962B: f (thread.c:172)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x10963A: f (thread.c:179)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x10963B: f (thread.c:179)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x1098A6: thread_start_wrapper (thread.c:242)
+==66523== 
+==66523== Warning: client switching stacks?  SP change: 0x4a545c8 --> 0x1ffeffee40
+==66523==          to suppress, use: --max-stackframe=137344231544 or greater
+==66523== Conditional jump or move depends on uninitialised value(s)
+==66523==    at 0x109AA5: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D34: __sigsetjmp (setjmp.S:32)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Address 0x4a52418 is 216 bytes inside a block of size 656 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AC5: myThread_join (thread.c:332)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D47: __sigsetjmp (setjmp.S:43)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Address 0x4a52420 is 224 bytes inside a block of size 656 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AC5: myThread_join (thread.c:332)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D4B: __sigsetjmp (setjmp.S:47)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Address 0x4a52428 is 232 bytes inside a block of size 656 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AC5: myThread_join (thread.c:332)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D4F: __sigsetjmp (setjmp.S:48)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Address 0x4a52430 is 240 bytes inside a block of size 656 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AC5: myThread_join (thread.c:332)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D53: __sigsetjmp (setjmp.S:49)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Address 0x4a52438 is 248 bytes inside a block of size 656 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AC5: myThread_join (thread.c:332)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D57: __sigsetjmp (setjmp.S:50)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Address 0x4a52440 is 256 bytes inside a block of size 656 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AC5: myThread_join (thread.c:332)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D6D: __sigsetjmp (setjmp.S:55)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Address 0x4a52448 is 264 bytes inside a block of size 656 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AC5: myThread_join (thread.c:332)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x48A1D83: __sigsetjmp (setjmp.S:61)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Address 0x4a52450 is 272 bytes inside a block of size 656 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AC5: myThread_join (thread.c:332)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 4
+==66523==    at 0x48A1DBC: __sigjmp_save (sigjmp.c:29)
+==66523==    by 0x109528: alarmHandlr (thread.c:137)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Address 0x4a52458 is 280 bytes inside a block of size 656 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AC5: myThread_join (thread.c:332)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid write of size 4
+==66523==    at 0x109538: alarmHandlr (thread.c:139)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Address 0x4a52340 is 0 bytes inside a block of size 656 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AC5: myThread_join (thread.c:332)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Invalid read of size 4
+==66523==    at 0x109A05: myThread_schedule (thread.c:301)
+==66523==    by 0x109547: alarmHandlr (thread.c:140)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Address 0x4a52340 is 0 bytes inside a block of size 656 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AC5: myThread_join (thread.c:332)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x1096D1: myThread_create (thread.c:196)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Conditional jump or move depends on uninitialised value(s)
+==66523==    at 0x109A41: myThread_schedule (thread.c:308)
+==66523==    by 0x109547: alarmHandlr (thread.c:140)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523== 
+==66523== Conditional jump or move depends on uninitialised value(s)
+==66523==    at 0x48A1E2C: longjmp (longjmp.c:32)
+==66523==    by 0x109A88: myThread_schedule (thread.c:319)
+==66523==    by 0x109547: alarmHandlr (thread.c:140)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x109A9B: myThread_join (thread.c:328)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523== 
+==66523== Warning: client switching stacks?  SP change: 0x1ffeffee18 --> 0x4a558d0
+==66523==          to suppress, use: --max-stackframe=137344226632 or greater
+==66523==          further instances of this message will not be shown.
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x48A1F31: __longjmp (__longjmp.S:104)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x10956A: alarmHandlr (thread.c:155)
+==66523==    by 0x48A220F: ??? (in /usr/lib/x86_64-linux-gnu/libc-2.31.so)
+==66523==    by 0x493C331: clock_nanosleep@@GLIBC_2.17 (clock_nanosleep.c:78)
+==66523==    by 0x4942046: nanosleep (nanosleep.c:27)
+==66523==    by 0x4941F7D: sleep (sleep.c:55)
+==66523==    by 0x10961F: f (thread.c:174)
+==66523==    by 0x1098A5: thread_start_wrapper (thread.c:241)
+==66523== 
+==66523== Invalid read of size 8
+==66523==    at 0x1098A6: thread_start_wrapper (thread.c:242)
+==66523==  Address 0x4a53578 is 3,944 bytes inside a block of size 8,192 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AB9: myThread_join (thread.c:331)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109718: myThread_create (thread.c:202)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Conditional jump or move depends on uninitialised value(s)
+==66523==    at 0x48A1E2C: longjmp (longjmp.c:32)
+==66523==    by 0x1098BA: thread_start_wrapper (thread.c:242)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x48A1F31: __longjmp (__longjmp.S:104)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x1098BB: thread_start_wrapper (thread.c:247)
+==66523== 
+==66523== Invalid read of size 8
+==66523==    at 0x1098BB: thread_start_wrapper (thread.c:247)
+==66523==  Address 0x4a53578 is 3,944 bytes inside a block of size 8,192 free'd
+==66523==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109AB9: myThread_join (thread.c:331)
+==66523==    by 0x109C24: main (thread.c:350)
+==66523==  Block was alloc'd at
+==66523==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==66523==    by 0x109718: myThread_create (thread.c:202)
+==66523==    by 0x109BF9: main (thread.c:342)
+==66523== 
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x1098C2: thread_start_wrapper (thread.c:247)
+==66523==    by 0x1098BA: thread_start_wrapper (thread.c:242)
+==66523== 
+==66523== Conditional jump or move depends on uninitialised value(s)
+==66523==    at 0x48A1E2C: longjmp (longjmp.c:32)
+==66523==    by 0x10981F: thread_exit (thread.c:226)
+==66523==    by 0x1098C6: thread_start_wrapper (thread.c:247)
+==66523== 
+==66523== Jump to the invalid address stated on the next line
+==66523==    at 0xAEBBEF0B36E54E1F: ???
+==66523==  Address 0xaebbef0b36e54e1f is not stack'd, malloc'd or (recently) free'd
+==66523== 
+==66523== 
+==66523== Process terminating with default action of signal 11 (SIGSEGV)
+==66523==  Bad permissions for mapped region at address 0xAEBBEF0B36E54E1F
+==66523==    at 0xAEBBEF0B36E54E1F: ???
+==66523== Use of uninitialised value of size 8
+==66523==    at 0x4831134: _vgnU_freeres (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_core-amd64-linux.so)
+==66523== 
+==66523== Invalid write of size 8
+==66523==    at 0x4831134: _vgnU_freeres (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_core-amd64-linux.so)
+==66523==  Address 0xaebbef0b36e54e17 is not stack'd, malloc'd or (recently) free'd
+==66523== 
+==66523== 
+==66523== Process terminating with default action of signal 11 (SIGSEGV)
+==66523==  General Protection Fault
+==66523==    at 0x4831134: _vgnU_freeres (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_core-amd64-linux.so)
+==66523== 
+==66523== HEAP SUMMARY:
+==66523==     in use at exit: 13,360 bytes in 7 blocks
+==66523==   total heap usage: 9 allocs, 2 frees, 22,208 bytes allocated
+==66523== 
+==66523== LEAK SUMMARY:
+==66523==    definitely lost: 8,344 bytes in 2 blocks
+==66523==    indirectly lost: 0 bytes in 0 blocks
+==66523==      possibly lost: 0 bytes in 0 blocks
+==66523==    still reachable: 5,016 bytes in 5 blocks
+==66523==         suppressed: 0 bytes in 0 blocks
+==66523== Rerun with --leak-check=full to see details of leaked memory
+==66523== 
+==66523== Use --track-origins=yes to see where uninitialised values come from
+==66523== For lists of detected and suppressed errors, rerun with: -s
+==66523== ERROR SUMMARY: 348046 errors from 69 contexts (suppressed: 0 from 0)

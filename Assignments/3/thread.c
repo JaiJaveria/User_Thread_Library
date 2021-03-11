@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <setjmp.h>
+#include <string.h>
 #include <signal.h>
 #include <unistd.h>
 
@@ -14,10 +15,11 @@ typedef struct tcb
     } status;
 	int read;//exist status read or not 
 	int id;
-	jmp_buf startenv;
+	// jmp_buf startenv;
 	jmp_buf currentenv;
-	void *stack_orig;
-	void *stack_ptr;
+	// jmp_buf SVenv;
+	unsigned long *stack_orig;
+	unsigned long *stack_ptr;
 	int stack_size;
 	void (*func) (void *a);
 	void *arg;
@@ -25,6 +27,7 @@ typedef struct tcb
 typedef struct scheduler_val
 {
 	jmp_buf env;
+	jmp_buf handlerEnv;
 }scheduler_val;
 typedef struct mythread_t
 {
@@ -37,10 +40,16 @@ typedef struct cirQueue
 	TCB_PTR *q_orig;
 	int queueSize;
 	int queueLen;
-	TCB_PTR *head;
-	TCB_PTR *tail;
+	int head;
+	int tail;
 } cirQueue;
 #define STACK_SIZE 8192
+#ifndef JB_SP
+#define JB_SP 6
+#endif
+#ifndef JB_PC
+#define JB_PC 7
+#endif
 // TCB_PTR *queue;
 // int queueSize=5;
 // int queueLen=0;
@@ -52,49 +61,186 @@ int insideMTC=0;//mythreadcreate
 int insideSchduler=0;//mythreadcreate
 
 void myThread_schedule();
+void alarmHandlr (int a);
+
+void myFunc(void *a)
+{
+	// static int i=0;
+	for (int i = 0; i < 1000; ++i)
+	{
+		sleep(0.9);
+		// sleep(1);
+		printf("%d ", i);
+		/* code */
+	}
+	printf("f finished.\n");
+}
+void myFuncMain()
+{
+	// static int i=0;
+	for (int i = 0; i < 1000; ++i)
+	{
+		sleep(0.9);
+		// sleep(1);
+		printf("M%d ", i);
+		/* code */
+	}
+	printf("f finished.\n");
+}
 
 void cirQueueInit(cirQueue **q)
 {
-	cirQueue *queue= *q;
+	cirQueue *queue;
 	queue=malloc(sizeof(cirQueue));
 	queue->queueSize=5;
 	queue->queueLen=0;
 	queue->q_orig=malloc(sizeof(TCB_PTR)*(queue->queueSize));
-	queue->head=queue->q_orig;
-	queue->tail=queue->q_orig;
+	queue->head=-1;
+	queue->tail=-1;
+	*q=queue;
 }
+void cirEnqueue(cirQueue **queue, TCB_PTR t)
+{
+	cirQueue *q=*queue;
+	if (q->queueLen < q->queueSize)
+	{
+		if (q->head==-1)
+		{
+			q->head=0;
+			q->tail=0;
+			
+		}
+		else if (q->tail==q->queueSize-1)
+		{
+			q->tail=0;
+		}
+		else
+			{q->tail++;}
+		q->queueLen++;
+		// printf("q tail %d\n",q->tail );
+		q->q_orig[q->tail]=t;
+		*queue=q;
+		// TCB_PTR a= ((*queue)->q_orig)[(*queue)->head];
+		// printf("89--t status %d\n", t->status);
+		// printf("89--t status %d\n", a->status);
+		// queue=&q;
+	} 
+	else
+	{
+		printf("Queue overflow not handled. exiting\n");
+		exit(-1);
+	}
+}
+void cirDequeue(cirQueue **queue)
+{
+	cirQueue *q=*queue;
+	if (q->queueLen!=0)
+	{
+		if (q->head==q->queueSize-1)
+		{
+			q->head=0;
+		}
+		else
+		{
+			q->head++;
+		}
+		q->queueLen--;
+	}
+	*queue=q;
+}
+static int growsLower (void *fromaddr)
+{
+	int toaddr;
+	return fromaddr > (void *) &toaddr;
+}
+static long int manglex64(long int p) {
+    long int ret;
+    asm(" mov %1, %%rax;\n"
+        " xor %%fs:0x30, %%rax;"
+        " rol $0x11, %%rax;"
+        " mov %%rax, %0;"
+        : "=r"(ret)
+        : "r"(p)
+        : "%rax");
+    return ret;
+}
+void wrapper() 
+{
+    printf("function started\n");
+    printf("currentThread id %d\n", currentThread->id);
+    currentThread->func(currentThread->arg);
+    //put exit thread here
+    // myThread_exit();
+	currentThread->status=EXITED;
+	printf("exited\n");
+	// printf("145--%u\n",t->status);
+    // ualarm(50000,50000);
+	longjmp(sv->env,1);
+}
+void libInit()
+{
+	// printf("libInit Called\n"); 
+	cirQueueInit(&queue);
+	sv=malloc(sizeof(scheduler_val));
+	myThread_schedule();//set the sv->env variable
+	struct sigaction *s=malloc(sizeof(struct sigaction));
+	s->sa_handler=&alarmHandlr;
+	s->sa_flags=SA_NODEFER;
+    sigaction(SIGALRM,s,NULL);
+    // free(s);
+	thread_lib_init=1;//initialization done
+}
+
+
 void alarmHandlr (int a)
 {
+	ualarm(0,0);
 	if (a==SIGALRM)
 	{
-		printf("SIGALRM signal recieved\n");
-		if (insideMTC)
-		{
-			printf("Thread creation is progress. Resuming\n");
-			return;//continue what you were doing.
-		}
-		if (insideSchduler)
-		{
-			printf("Thread scheduler already called. Resuming that\n");
-			return;
-		}
-		printf("thread creation not happening nor a scheduler already working. calling the scheduler\n"); 
+		printf("120--SIGALRM signal recieved\n");
+		// if (insideMTC)
+		// {
+		// 	printf("Thread creation is progress. Resuming\n");
+		// 	return;//continue what you were doing.
+		// }
+		// if (insideSchduler)
+		// {
+		// 	printf("Thread scheduler already called. Resuming that\n");
+		// 	return;
+		// }
+		// printf("thread creation not happening nor a scheduler already working. calling the scheduler\n"); 
 		if (currentThread==NULL)
 		{
-			myThread_schedule();
+			printf("current thread null. assertion error\n");
+			exit(-1);
+			// if (setjmp(sv->handlerEnv)==0)
+			// {
+			// 	longjmp(sv->env,1);
+			// 	/* code */
+			// }
+			// myThread_schedule();
 		}
 		else
 		{
 			if (setjmp(currentThread->currentenv)==0)
 			{
+				printf("Signal recieved in execution of thread %d. Saving context.\n", currentThread->id );
+				// printf("140--currentThread current enviornment %d\n", currentThread->currentenv);
+				// printf("%d\n", currentThread->currentenv);
 				currentThread->status=READY;
-				myThread_schedule();
-			}
-			// else
-			// {
-			// 	currentThread->status=RUNNING;
+				// myThread_schedule();
+				// longjmp(currentThread->currentenv,1);
+            	printf("233-stk ptr %lu\n",currentThread->currentenv[0].__jmpbuf[JB_SP] );
 
-			// }
+				longjmp(sv->env,1);
+			}
+			else
+			{
+				printf("147--Called Again thread %d\n", currentThread->id);
+            	printf("240-stk ptr %lu\n",currentThread->currentenv[0].__jmpbuf[JB_SP] );
+				ualarm(50000,50000);
+				return;
+			}
 		}
 		
 	}
@@ -104,53 +250,12 @@ void alarmHandlr (int a)
 		exit(-1);
 	}
 }
-void libInit()
-{
-	cirQueueInit(&queue);
-	
-	sv=malloc(sizeof(scheduler_val));
-	struct sigaction *s=malloc(sizeof(struct sigaction));
-	s->sa_handler=&alarmHandlr;
-	// s->sa_flags=SA_NODEFER;
-    sigaction(SIGALRM,s,NULL);
-    ualarm(50000,50000);
-    // free(s);
-	thread_lib_init=1;//initialization done
-	exit(-1);
-}
-// int getQueueLoc(cirQueue)
-// {
-// 	if (queueLen<queueSize)
-// 		return queueLen++;
-// 	else
-// 	{
-// 		printf("getQueueLoc not handled. thread queue overflow. Exitinng\n");
-// 		exit(-1);
-// 		// return 0;//to be handled later
-// 	}
-// }
-// void incQueueLen()
-// {
-// 	queueLen++;
-// }
-void f(void *a)
-{
-	int i=0;
 
-	printf("Hello World %d\n", i);
-}
-static int growsLower (void *fromaddr)
-{
-	int toaddr;
-	return fromaddr > (void *) &toaddr;
-}
 int myThread_create(mythread_t *th,void *attr, void *start_routine, void *args)
 {
+	ualarm(0,0);
 	insideMTC=1;
-	if (thread_lib_init==0)
-	{
-		libInit();
-	}
+	
 	static int id=1;
 	
 	int index;//=getQueueLoc();
@@ -169,106 +274,223 @@ int myThread_create(mythread_t *th,void *attr, void *start_routine, void *args)
 	t->func=start_routine;
 	t->arg=args;
 	th->tb=t;
-	
-	index=getQueueLoc();
-	queue[index]=t;
-	// incQueueLen();
-	printf("151--Thread created\n");
-	insideMTC=0;
-	return t->id;
 
+	if (thread_lib_init==0)
+	{
+		libInit();
+		tcb *t=malloc(sizeof(tcb));
+		t->read=0;
+		t->id=0;//MAIN THREAD
+		t->status=RUNNING;
+		currentThread=t;
+		// if (setjmp(t->currentenv)==0)
+		// {
+		// 	// cirEnqueue(&queue,currentThread);
+		// }
+		// else
+		// {
+  //   		ualarm(50000,50000);
+		// 	return;
+		// }
+
+	}
+	cirEnqueue(&queue,t);
+	// printf("201--%d\n", queue->head);
+	// TCB_PTR a= (queue->q_orig)[queue->head];
+	// printf("215--t %d\n", a);
+	// printf("215--t status %d\n", a->status);
+	printf("214--Thread created\n");
+	// insideMTC=0;
+    ualarm(50000,50000);
+	return t->id;
 }
-void thread_exit(TCB_PTR t)
-{
-	t->status=EXITED;
-	printf("exited\n");
-	printf("145--%u\n",t->status);
-	longjmp(sv->env,1);
-}
+// void thread_exit(TCB_PTR t)
+// {
+// 	printf("Thread\n");
+
+// 	t->status=EXITED;
+// 	// printf("exited\n");
+// 	// printf("145--%u\n",t->status);
+//     ualarm(50000,50000);
+// 	longjmp(t->SVenv,1);
+// }
 void thread_start_wrapper(TCB_PTR t)
 {
+    printf("236--Inside thread start wrapper. t id %d\n", t->id);
+    t->status=RUNNING;
+
 	// insideSchduler=0;//assumption only called at the end of my thread scheduler
-	register void *top = t->stack_ptr;
-    asm volatile(
-        "mov %[rs], %%rsp \n"
-        : [ rs ] "+r" (top) ::
-    );
-  //   if (t->status==READY)
+	// register void *top = t->stack_ptr;
+ //    asm volatile(
+ //        "mov %[rs], %%rsp \n"
+ //        : [ rs ] "+r" (top) ::
+ //    );
+    if(setjmp(t->currentenv) == 0)
+        {
+        	printf("330--t id %d\n", t->id);
+            // t->currentenv[0].__jmpbuf[JB_SP] = manglex64((unsigned long)(t->stack_ptr));
+            t->currentenv[0].__jmpbuf[JB_SP] = manglex64((unsigned long)(t->stack_orig + (STACK_SIZE-8) / 8 - 2));
+            t->currentenv[0].__jmpbuf[JB_PC] = manglex64((unsigned long) wrapper);
+            // wrapper();
+            printf("wrapper called\n");
+			ualarm(50000,50000);
+            longjmp(t->currentenv,1);
+        }
+  //   // if (t->status==CREATED)
+  //   // {
+  //   	t->status=RUNNING;
+  // //   	if (setjmp(t->startenv)==0)
+		// // {
+		// 	// insideSchduler=0;
+		// 	t->status=RUNNING;
+		// 	ualarm(50000,50000);
+		// 	(t->func)(t->arg);
+		// 	// printf("Thread wrapper again\n"); 
+		// 	t->status=EXITED;
+		// 	printf("exited\n");
+		// 	// printf("145--%u\n",t->status);
+		//     // ualarm(50000,50000);
+		// 	longjmp(sv->env,1);
+		// 	// longjmp(t->SVenv,1);
+		// 	// longjmp(t->SVenv,1);
+		// 	// thread_exit(t);
+		// 	// longjmp(t->startenv,1);
+		// }
+
+  //   }
+  //   else	
   //   {
   //   	t->status=RUNNING;
-		// insideSchduler=0;
-		// longjmp(t->currentenv,1);
+		// ualarm(50000,50000);
+
+  //   	longjmp(t->currentenv,1);
   //   }
-  //   else
-    {
-    	if (setjmp(t->startenv)==0)
-		{
-			insideSchduler=0;
-    		t->status=RUNNING;
-			(t->func)(t->arg);
-			longjmp(t->startenv,1);
-		}
-    }
+	
+    // }
 	
 	// return;
-	thread_exit(t);
+		// ualarm(50000,50000);
+
 	// printf("190--%d\n",t->status );
 }
 void myThread_schedule()
 {
-	insideSchduler=1;
-	if (queueLen==0)
-	//if there is not other thread just return to the existing thread only or anywhere where it was called from 
+	ualarm(0,0);
+	if (setjmp(sv->env)==0)
 	{
-		// free(queue);
-		// free(sv);
-		printf("Nothing wating in the ready queue. returning\n");
-		if (currentThread)
-		{
-			currentThread->status=RUNNING;
-			/* code */
-		}
-		insideSchduler=0;
+		ualarm(50000,50000);
 		return;
 	}
 	else
 	{
-		if (currentThread==NULL)
+		// insideSchduler=1;
+		if (queue->queueLen==0)
+		//if there is not other thread just return to the existing thread only or anywhere where it was called from 
 		{
-			/* code */
-			TCB_PTR t=queue[0];
-			currentThread=t;
-			queueLen--;
-			if (setjmp(sv->env)==0)
+			// free(queue);
+			// free(sv);
+			printf("283--Nothing wating in the ready queue. Returning\n");
+			if (currentThread!=NULL)
 			{
-				thread_start_wrapper(t);
+				currentThread->status=RUNNING;
+				/* code */
 			}
-			else
-			{
-				printf("218--%d\n",t->status);
-			}
-
+			// insideSchduler=0;
+			ualarm(50000,50000);
+			longjmp(currentThread->currentenv,1);
 		}
 		else
 		{
-			TCB_PTR t=queue[0];
-			currentThread=t;
-			queueLen--;
-			longjmp(t->currentenv,1);
-			// if (setjmp(sv->env)==0)
-			// {
-			// 	thread_start_wrapper(t);
-			// }
+			if (currentThread==NULL)
+			{
+				printf("393--Current Thread null. assertion error\n"); 
+				// /* code */
+				// printf("274--queue head %d\n", queue->head);
+				// TCB_PTR t=queue->q_orig[queue->head];
+				// currentThread=t;
+				// cirDequeue(&queue);
+				// if (t->status==CREATED)
+				// {
+				// 	// t->status==RUNNING;
+				// 	// if (setjmp(t->SVenv)==0)
+				// 	// {
+				// 		thread_start_wrapper(t);
+				// 	// }
+				// 	// else
+				// 	// {
+				// 	// 	// printf("285--%d\n",t->status);
+				// 	// }
+				// 	/* code */
+				// }
+				// else
+				// {
+				// 	printf("Some error. No current thread and the queue.Not thought of. Exiting\n");
+				// 	printf("Thread status %d\n",t->status );
+				// 	exit(-1);
+				// }
+			}
+			else
+			{
+				printf("322--queue head %d\n", queue->head);
+				TCB_PTR t=queue->q_orig[queue->head];
+				// printf("324--t current enviornment %d\n", t->currentenv);
+				// TCB_PTR t=queue[0];
+				if (currentThread->status!=EXITED)
+				{
+					currentThread->status=READY;
+					cirEnqueue(&queue,currentThread);
+					/* code */
+				}
+				currentThread=t;
+				cirDequeue(&queue);
+				// thread_start_wrapper(t);
+				if (currentThread->status==READY)
+				{
+					t->status==RUNNING;
+					// if (setjmp(currentThread->SVenv)==0)
+					// {
+						// thread_start_wrapper(currentThread);
+					// }
+					longjmp(currentThread->currentenv,1);
+					/* code */
+				}
+				else if (currentThread->status==CREATED)
+				{
+					// if (setjmp(currentThread->SVenv)==0)
+					// {
+						thread_start_wrapper(currentThread);
+					// }
+				}
+				else
+				{
+					printf("status of thread not at queeue is %d, which is not RUNNING or CREATED. asseryion error. exiting\n", currentThread->status );
+					exit(-1);
+				}
+				// if (t->status==CREATED)
+				// {
+				// 	if (setjmp(t->SVenv)==0)
+				// 	{
+				// 		thread_start_wrapper(t);
+				// 	}
+				// }
+				// else
+				// {
+				// 	insideSchduler=0;
+				// 	longjmp(t->currentenv,1);
+				// }
+				
+			}
+			
 		}
-		
-	}
+	}	
+	// longjmp(sv->handlerEnv,1);
+	// longjmp()
 }
 void myThread_join(mythread_t mtt)
 {
+	printf("428--Inside Join\n");
 	while(((mtt.tb))->status!=EXITED)
 	{
-		// printf("%u\n",((mtt.tb))->status );
-		// exit(-1);
 	}
 	free(((mtt.tb))->stack_orig);
 	free((mtt.tb));
@@ -276,9 +498,22 @@ void myThread_join(mythread_t mtt)
 int main(int argc, char const *argv[])
 {
 	void *a;
-	mythread_t t;
-	int i=myThread_create(&t,NULL,(&f),a);
+	int count=atoi(argv[1]);
+	mythread_t t[count];
+	// mythread_t t2;
+	for (int i = 0; i < count; ++i)
+	{
+		myThread_create(&(t[i]),NULL,(&myFunc),a);
+	}
+	printf("443--Thread creation done. in main again.\n");
+	// i=myThread_create(&t2,NULL,(&f),a);
 	// printf("196--%u\n", ((t.tb))->status);
-	myThread_join(t);
+	// myThread_join(t);
+	myFuncMain();
+	for (int i = 0; i < count; ++i)
+	{
+		myThread_join(t[i]);
+		/* code */
+	}
 	return 0;
 }
