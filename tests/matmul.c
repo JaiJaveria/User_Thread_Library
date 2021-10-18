@@ -12,13 +12,6 @@ typedef struct matmulArg
 	int *b;
 	int j;
 	int i;
-	// int*** c;
-	// int **a;
-	// int **b;
-	// int *i;
-	// int *j;
-	// int a_y;
-	// int
 } matmulArg;
 void matmulElem(void *args)
 {
@@ -141,34 +134,6 @@ void myFuncSync(mythread_mutex_t *p)
 }
 int main(int argc, char const *argv[])
 {
-	// void *a;
-	// if (argc!=2)
-	// {
-	// 	printf("specify the count of threads. exiting \n");
-	// 	exit(-1);
-	// }
-	// int count=atoi(argv[1]);
-	// mythread_t t[count];
-	// // mythread_t t2;
-	// mythread_mutex_t p;
-	// mythread_mutex_init(&p, NULL);
-
-	// for (int i = 0; i < count; ++i)
-	// {
-	// 	// myThread_create(&(t[i]),NULL,(&myFunc),a);
-	// 	myThread_create(&(t[i]),NULL,(&myFuncSync),&p);
-	// }
-	// // printf("443--Thread creation done. in main again.\n");
-	// // i=myThread_create(&t2,NULL,(&f),a);
-	// // printf("196--%u\n", ((t.tb))->status);
-	// // myThread_join(t);
-	// // myFuncMain();
-	// for (int i = 0; i < count; ++i)
-	// {
-	// 	myThread_join(t[i]);
-	// 	/* code */
-	// }
-	
 	int *a,*b,*c;
 	int a_x=5,a_y=5,b_y=2;
 	a=malloc(sizeof(int)*a_x*a_y);
